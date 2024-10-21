@@ -1,0 +1,67 @@
+services:
+
+  poc-tcp-api:
+    container_name: poc-tcp-api
+    build:
+      context: ./api-gateway/
+      target: dev
+      dockerfile: Dockerfile
+    depends_on:
+      - poc-tcp-backend
+    networks:
+      - poc-tcp
+    environment:
+      - NODE_ENV=develop
+      - TCP_SERVER_HOST=poc-tcp-backend
+      - TCP_SERVER_PORT=3002
+      - HTTP_PORT=8091
+    ports:
+      - 8091:8091
+
+  poc-tcp-backend:
+    container_name: poc-tcp-backend
+    build:
+      context: ./backend/
+      target: dev
+      dockerfile: Dockerfile
+    depends_on:
+      - poc-tcp-frontend
+    networks:
+      - poc-tcp
+    environment:
+      - NODE_ENV=develop
+      - TCP_HOST=poc-tcp-backend
+      - TCP_PORT=3002
+      - TCP_SERVER_HOST=poc-tcp-frontend
+      - TCP_SERVER_PORT=8088
+      - HTTP_PORT=8089
+    ports:
+      - 8089:8089
+      - 3002:3002
+
+  poc-tcp-frontend:
+    container_name: poc-tcp-frontend
+    build:
+      context: ./frontend/
+      target: dev
+      dockerfile: Dockerfile
+    volumes:
+        - ./frontend:/app
+        - /app/node_modules
+        - /app/.next
+    networks:
+      - poc-tcp
+    environment:
+      - BACKEND_URL=
+      - TCP_HOST=localhost
+      - TCP_PORT=8088
+      - HTTP_PORT=3000
+      - WEBSOCKET_PORT=8087
+    ports:
+      - 8087:8087
+      - 3000:3000
+      - 8088:8088
+
+networks:
+  poc-tcp:
+    driver: bridge

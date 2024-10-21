@@ -12,13 +12,13 @@ app.prepare().then(() => {
     handle(req, res);
   });
 
-  server.listen(3000, (err) => {
+  server.listen(process.env.HTTP_PORT, (err) => {
     if (err) throw err;
-    console.log('Servidor HTTP Next.js rodando na porta 3000');
+    console.log(`Servidor HTTP Next.js rodando na porta ${process.env.HTTP_PORT}`);
   });
 
   // WEBSOCKET ==============================================
-  const wss = new WebSocket.Server({ port: 8083 });
+  const wss = new WebSocket.Server({ port: process.env.WEBSOCKET_PORT });
   const clients = new Set();
   wss.on('connection', (ws) => {
     console.log('Cliente WebSocket conectado');

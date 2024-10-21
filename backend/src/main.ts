@@ -3,13 +3,14 @@ import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+  const port = parseInt(process.env.TCP_PORT) ?? 4000;
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule, 
     {
       transport: Transport.TCP,
       options: {
-        host: '127.0.0.1',
-        port: 4000, 
+        host: process.env.TCP_HOST ?? '127.0.0.1',
+        port: port, 
       },
     }
   );
@@ -17,7 +18,7 @@ async function bootstrap() {
   await app.listen();
 
   console.log("===================================================")
-  console.log('Servidor TCP rodando na porta 4000');
+  console.log(`Servidor TCP rodando na porta ${port}`);
   console.log("===================================================")
 }
 bootstrap();

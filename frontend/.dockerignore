@@ -1,0 +1,10 @@
+# Ignorar arquivos temporários
+*.tmp
+
+# Ignorar a pasta node_modules (caso de projetos Node.js)
+node_modules/
+
+# Ignorar arquivos de configuração locais
+*.env
+
+/dist/

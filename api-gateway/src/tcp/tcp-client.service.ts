@@ -9,8 +9,8 @@ export class TcpClientService {
     this.client = ClientProxyFactory.create({
       transport: Transport.TCP,
       options: {
-        host: '127.0.0.1',
-        port: 4000,
+        host: process.env.TCP_SERVER_HOST ?? 'localhost',
+        port: parseInt(process.env.TCP_SERVER_PORT) ?? 4000
       },
     });
   }

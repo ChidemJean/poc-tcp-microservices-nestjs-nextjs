@@ -30,9 +30,9 @@ const startTcpServer = ({ onData, onEnd, onError }) => {
 
   const server = net.createServer(handleConnection);
 
-  server.listen(8443, (err) => {
+  server.listen(process.env.TCP_PORT, (err) => {
     if (err) throw err;
-    console.log('Servidor TCP rodando na porta 8443');
+    console.log(`Servidor TCP rodando na porta ${process.env.TCP_PORT}`);
   });
 }
 

@@ -6,7 +6,7 @@ const WebsocketTest = () => {
   const [messages, setMessages] = useState<any>([]);
 
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:8083'); // URL do servidor WebSocket
+    const socket = new WebSocket('ws://localhost:8087'); // URL do servidor WebSocket
 
     async function addMessage(data: Blob) {
       const message = await blobToString(data)

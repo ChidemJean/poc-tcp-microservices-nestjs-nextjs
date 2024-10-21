@@ -6,9 +6,10 @@ console.log('arguments: ' + process.argv);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(8080);
+  const port = parseInt(process.env.HTTP_PORT) ?? 8080;
+  await app.listen(port);
   console.log("===================================================");
-  console.log('Servidor HTTP rodando na porta 3000');
+  console.log(`Servidor HTTP rodando na porta ${port}`);
   console.log("===================================================");
 }
 bootstrap();
