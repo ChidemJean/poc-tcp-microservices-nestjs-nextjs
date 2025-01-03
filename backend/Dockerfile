@@ -1,15 +1,27 @@
 # Base image
-FROM node:18-alpine as base
-RUN apk add --no-cache g++ make py3-pip libc6-compat
+FROM node:20-slim as base
+
+RUN apt update && apt install -y --no-install-recommends \
+    g++ \
+    make \
+    python3-pip \
+    libc6-dev \
+    procps \
+    openssl && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir /app
 WORKDIR /app
-COPY package*.json ./
+
 EXPOSE 8089
 EXPOSE 3002
 
-RUN apk add --no-cache openssl
-
 RUN mkdir -p /app/ssl && \
-    openssl req -nodes -new -x509 -keyout /app/ssl/server.key -out /app/ssl/server.cert -days 365 -subj "/C=BR/ST=SP/L=SaoPaulo/O=MyOrg/OU=IT/CN=example.com"
+    openssl req -nodes -new -x509 \
+    -keyout /app/ssl/server.key \
+    -out /app/ssl/server.cert \
+    -days 365 \
+    -subj "/C=BR/ST=SP/L=SaoPaulo/O=MyOrg/OU=IT/CN=example.com"
 
 ENV SSL_KEY_FILE="/app/ssl/server.key"
 ENV SSL_CERT_FILE="/app/ssl/server.cert"
@@ -41,6 +53,4 @@ CMD npm run start:prod
 # Development stage
 FROM base as dev
 ENV NODE_ENV=development
-RUN npm install
-COPY . .
-CMD npm run start:debug
+CMD [ "/app/.docker/start-dev.sh" ]
